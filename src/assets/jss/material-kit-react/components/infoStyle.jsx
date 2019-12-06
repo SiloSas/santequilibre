@@ -6,8 +6,10 @@ import {
   infoColor,
   roseColor,
   grayColor,
-  title
+  title,
 } from "assets/jss/material-kit-react.jsx";
+import imagesStyles from "assets/jss/material-kit-react/imagesStyles.jsx";
+
 
 const infoStyle = {
   infoArea: {
@@ -62,7 +64,8 @@ const infoStyle = {
   iconVertical: {
     width: "61px",
     height: "61px"
-  }
+  },
+  ...imagesStyles
 };
 
 export default infoStyle;

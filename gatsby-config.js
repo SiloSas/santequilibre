@@ -1,7 +1,7 @@
 module.exports = {
-  pathPrefix: `/mini-gatsbyv2-material-kit-react`,
+  pathPrefix: `/santequilibre`,
   siteMetadata: {
-    title: 'Gatsby Default Starter',
+    title: 'Santéquilibre',
   },
   plugins: [
     'gatsby-plugin-resolve-src',

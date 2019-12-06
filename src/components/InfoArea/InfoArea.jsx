@@ -8,8 +8,14 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import infoStyle from "assets/jss/material-kit-react/components/infoStyle.jsx";
 
+const images = {
+  reflexiologie: require("assets/img/reflexiologie.jpg"),
+    herboriste: require("assets/img/herboriste.jpg"),
+    medecine_chinoise: require("assets/img/medecine_chinoise.jpg"),
+}
+
 function InfoArea({ ...props }) {
-  const { classes, title, description, iconColor, vertical } = props;
+  const { classes, title, description, iconColor, vertical, image } = props;
   const iconWrapper = classNames({
     [classes.iconWrapper]: true,
     [classes[iconColor]]: true,
@@ -22,7 +28,14 @@ function InfoArea({ ...props }) {
   return (
     <div className={classes.infoArea}>
       <div className={iconWrapper}>
-        <props.icon className={iconClasses} />
+       <img src={images[image]}
+            className={
+           classes.imgRaised +
+           " " +
+           classes.imgRounded +
+           " " +
+           classes.imgFluid
+       }/>
       </div>
       <div className={classes.descriptionWrapper}>
         <h4 className={classes.title}>{title}</h4>
@@ -38,7 +51,6 @@ InfoArea.defaultProps = {
 
 InfoArea.propTypes = {
   classes: PropTypes.object.isRequired,
-  icon: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   iconColor: PropTypes.oneOf([

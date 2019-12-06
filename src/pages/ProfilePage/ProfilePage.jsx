@@ -4,9 +4,6 @@ import classNames from "classnames";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
-import Camera from "@material-ui/icons/Camera";
-import Palette from "@material-ui/icons/Palette";
-import Favorite from "@material-ui/icons/Favorite";
 // React icons
 import { FaTwitter, FaFacebook, FaInstagram } from 'react-icons/fa';
 // core components
@@ -16,27 +13,29 @@ import Button from "components/CustomButtons/Button.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
-import NavPills from "components/NavPills/NavPills.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 
-import profile from "assets/img/faces/christian.jpg";
-
-import studio1 from "assets/img/examples/studio-1.jpg";
-import studio2 from "assets/img/examples/studio-2.jpg";
-import studio3 from "assets/img/examples/studio-3.jpg";
-import studio4 from "assets/img/examples/studio-4.jpg";
-import studio5 from "assets/img/examples/studio-5.jpg";
-import work1 from "assets/img/examples/olu-eletu.jpg";
-import work2 from "assets/img/examples/clem-onojeghuo.jpg";
-import work3 from "assets/img/examples/cynthia-del-rio.jpg";
-import work4 from "assets/img/examples/mariya-georgieva.jpg";
-import work5 from "assets/img/examples/clem-onojegaw.jpg";
-
+import teamData from "assets/json/team"
 import profilePageStyle from "assets/jss/material-kit-react/views/profilePage.jsx";
 
+const images = {
+    Nathalie_Pardo: require("assets/img/faces/Nathalie_Pardo.jpg"),
+    Sylvie_Bonnassieux: require("assets/img/faces/Sylvie_Bonnassieux.jpg"),
+    Chrystel_Diener: require("assets/img/faces/Chrystel_Diener.jpg"),
+    Sylvie_Bonnassieux_work: require("assets/img/reflexiologie.jpg"),
+    Chrystel_Diener_work: require("assets/img/herboriste.jpg"),
+    Nathalie_Pardo_work: require("assets/img/medecine_chinoise.jpg"),
+}
+
+
 class ProfilePage extends React.Component {
+
   render() {
-    const { classes, ...rest } = this.props;
+    const { classes, name, ...rest } = this.props;
+    const doctor = teamData.filter((d) => d.path === name)[0];
+    if (!doctor) {
+        return null
+    }
     const imageClasses = classNames(
       classes.imgRaised,
       classes.imgRoundedCircle,
@@ -47,7 +46,7 @@ class ProfilePage extends React.Component {
       <div>
         <Header
           color="transparent"
-          brand="Material Kit React"
+          brand="Santéquilibre"
           rightLinks={<HeaderLinks />}
           fixed
           changeColorOnScroll={{
@@ -56,7 +55,7 @@ class ProfilePage extends React.Component {
           }}
           {...rest}
         />
-        <Parallax small filter image={require("assets/img/profile-bg.jpg")} />
+        <Parallax small filter image={images[doctor.image + "_work"]} />
         <div className={classNames(classes.main, classes.mainRaised)}>
           <div>
             <div className={classes.container}>
@@ -64,11 +63,13 @@ class ProfilePage extends React.Component {
                 <GridItem xs={12} sm={12} md={6}>
                   <div className={classes.profile}>
                     <div>
-                      <img src={profile} alt="..." className={imageClasses} />
+                      <img src={images[doctor.image]} alt="..." className={imageClasses} />
                     </div>
                     <div className={classes.name}>
-                      <h3 className={classes.title}>Christian Louboutin</h3>
-                      <h6>DESIGNER</h6>
+                      <h3 className={classes.title}>{doctor.name}</h3>
+                      <h6>{doctor.work}</h6>
+                        <h6>Sur rendez-vous au: {doctor.phone}</h6>
+                        <h6>{doctor.email}</h6>
                       <Button justIcon link className={classes.margin5}>
                         <FaTwitter/>
                       </Button>
@@ -84,128 +85,45 @@ class ProfilePage extends React.Component {
               </GridContainer>
               <div className={classes.description}>
                 <p>
-                  An artist of considerable range, Chet Faker — the name taken
-                  by Melbourne-raised, Brooklyn-based Nick Murphy — writes,
-                  performs and records all of his own music, giving it a warm,
-                  intimate feel with a solid groove structure.{" "}
+                  {doctor.smallText}
                 </p>
               </div>
-              <GridContainer justify="center">
-                <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
-                  <NavPills
-                    alignCenter
-                    color="primary"
-                    tabs={[
-                      {
-                        tabButton: "Studio",
-                        tabIcon: Camera,
-                        tabContent: (
-                          <GridContainer justify="center">
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={studio1}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio2}
-                                className={navImageClasses}
-                              />
+                <GridContainer>
+                  <GridItem justify="center" md={6} xs={12} sm={12} className={classes.navWrapper}>
+                      <h1>Tarifs</h1>
+                      <GridContainer>
+                          { doctor.tariffs.map((t) => {
+                            return <GridItem xs={12} sm={12} md={12} className={classes.navWrapper}>
+                                <h3>
+                                    {t.name} <small>{t.duration}  {t.price}€</small>
+                                </h3>
+                                <p>{t.description}</p>
                             </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={studio5}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio4}
-                                className={navImageClasses}
-                              />
+                          })}
+                      </GridContainer>
+                  </GridItem>
+                  <GridItem justify="center" md={6} xs={12} sm={12} className={classes.navWrapper}>
+                      <h1>Horaires</h1>
+                      <GridContainer>
+                          { doctor.slots.map((t) => {
+                            return <GridItem xs={12} sm={12} md={12} className={classes.navWrapper}>
+                                <h3>
+                                    {t.name}
+                                </h3>
+                                    {t.slots.map((slot) => (<p>{slot}</p>))}
                             </GridItem>
-                          </GridContainer>
-                        )
-                      },
-                      {
-                        tabButton: "Work",
-                        tabIcon: Palette,
-                        tabContent: (
-                          <GridContainer justify="center">
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work1}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work2}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work3}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work4}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work5}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                          </GridContainer>
-                        )
-                      },
-                      {
-                        tabButton: "Favorite",
-                        tabIcon: Favorite,
-                        tabContent: (
-                          <GridContainer justify="center">
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work4}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio3}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work2}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work1}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio1}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                          </GridContainer>
-                        )
-                      }
-                    ]}
-                  />
-                </GridItem>
-              </GridContainer>
+                          })}
+                      </GridContainer>
+                  </GridItem>
+                </GridContainer>
+                <div>
+                    {doctor.description.map((section) => {
+                        return <div>
+                            <h2>{section.title}</h2>
+                            <div dangerouslySetInnerHTML={{__html: section.text}}/>
+                        </div>
+                    })}
+                </div>
             </div>
           </div>
         </div>
